@@ -7,17 +7,58 @@ import {
     declareAction, PayloadActionCreator,
 } from '@reatom/core';
 
-export type AtomObservable<T extends Atom<any>> = Observable<T extends Atom<infer R> ? R : never>;
+export type AtomType<T extends Atom<any>> = T extends Atom<infer R> ? R : never;
 
-export function useAtom<T extends Atom<any>>(atom: Atom<T>): AtomObservable<T>;
-export function useAtom<T extends Atom<any>, F1 extends string>(
-    atom: Atom<T>,
+export function useAtom<T extends Atom<any>>(atom: T): Observable<AtomType<T>>;
+export function useAtom<T extends Atom<any>,
+    F1 extends keyof AtomType<T>>(
+    atom: T,
     field1: F1,
-): AtomObservable<T>;
+): Observable<AtomType<T>[F1]>;
+export function useAtom<T extends Atom<any>,
+    F1 extends keyof AtomType<T>,
+    F2 extends keyof AtomType<T>[F1]>(
+    atom: T,
+    field1: F1,
+    field2: F2,
+): Observable<AtomType<T>[F1][F2]>;
+export function useAtom<T extends Atom<any>,
+    F1 extends keyof AtomType<T>,
+    F2 extends keyof AtomType<T>[F1],
+    F3 extends keyof AtomType<T>[F1][F2]>(
+    atom: T,
+    field1: F1,
+    field2: F2,
+    field3: F3,
+): Observable<AtomType<T>[F1][F2][F3]>;
+export function useAtom<T extends Atom<any>,
+    F1 extends keyof AtomType<T>,
+    F2 extends keyof AtomType<T>[F1],
+    F3 extends keyof AtomType<T>[F1][F2],
+    F4 extends keyof AtomType<T>[F1][F2][F3]>(
+    atom: T,
+    field1: F1,
+    field2: F2,
+    field3: F3,
+    field4: F4,
+): Observable<AtomType<T>[F1][F2][F3][F4]>;
+export function useAtom<T extends Atom<any>,
+    F1 extends keyof AtomType<T>,
+    F2 extends keyof AtomType<T>[F1],
+    F3 extends keyof AtomType<T>[F1][F2],
+    F4 extends keyof AtomType<T>[F1][F2][F3],
+    F5 extends keyof AtomType<T>[F1][F2][F3][F4]>(
+    atom: T,
+    field1: F1,
+    field2: F2,
+    field3: F3,
+    field4: F4,
+    field5: F5,
+): Observable<AtomType<T>[F1][F2][F3][F4][F5]>;
 export function useAtom<T extends Atom<any>>(
     atom: Atom<T>,
     ...fields: string[]
-): AtomObservable<T> {
+): Observable<AtomType<T>> {
     return new Observable(observer => {
         if (fields.length === 0) {
             const subscription = NgReatom.store.subscribe(

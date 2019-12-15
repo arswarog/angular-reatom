@@ -5,4 +5,9 @@ export interface ITodo {
 export interface IState {
     todos: ITodo[];
     loading: boolean;
+    deepField: {
+        foo: {
+            bar: boolean;
+        };
+    };
 }

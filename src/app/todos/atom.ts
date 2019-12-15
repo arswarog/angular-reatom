@@ -4,6 +4,11 @@ import { IState } from './todos.interface';
 
 const initialState: IState = {
     loading: false,
+    deepField: {
+        foo: {
+            bar: true,
+        },
+    },
     todos: [],
 };
 

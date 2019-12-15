@@ -638,7 +638,11 @@ Todo List: <span *ngIf="loading$ | async">(loading)</span>
   </ul>
 </div>
 <div>
-  Currenct state:
+  Current state:
   <pre>{{state$ | async | json}}</pre>
+</div>
+<div>
+  <pre>deepField.foo: {{foo$ | async | json}}</pre>
+  <pre>deepField.foo.bar: {{bar$ | async | json}}</pre>
 </div>
 <router-outlet></router-outlet>

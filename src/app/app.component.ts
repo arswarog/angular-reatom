@@ -15,6 +15,8 @@ export class AppComponent implements OnInit {
 
     loading$ = useAtom(Todos, 'loading');
     todos$ = useAtom(Todos, 'todos');
+    foo$ = useAtom(Todos, 'deepField', 'foo');
+    bar$ = useAtom(Todos, 'deepField', 'foo', 'bar');
     state$ = useAtom(Todos);
 
     addItem = useAction(AddItem);
