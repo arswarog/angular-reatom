@@ -7,6 +7,7 @@ export interface IState {
     loading: boolean;
     deepField: {
         foo: {
+            toggle: boolean;
             bar: boolean;
         };
     };

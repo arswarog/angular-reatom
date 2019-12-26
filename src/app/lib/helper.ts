@@ -6,6 +6,8 @@ import {
     BaseActionCreator,
     declareAction, PayloadActionCreator,
 } from '@reatom/core';
+import { distinctUntilChanged, pluck } from 'rxjs/operators';
+
 
 export type AtomType<T extends Atom<any>> = T extends Atom<infer R> ? R : never;
 
@@ -59,22 +61,22 @@ export function useAtom<T extends Atom<any>>(
     atom: Atom<T>,
     ...fields: string[]
 ): Observable<AtomType<T>> {
-    return new Observable(observer => {
-        if (fields.length === 0) {
-            const subscription = NgReatom.store.subscribe(
-                atom,
-                observer.next.bind(observer),
-            );
-            observer.next(NgReatom.store.getState(atom) as any);
-            return subscription;
-        } else {
-            const subscription = NgReatom.store.subscribe(atom, data => {
-                observer.next(data[fields[0]] as any);
-            });
-            observer.next(NgReatom.store.getState(atom)[fields[0]] as any);
-            return subscription;
-        }
+    const stream = new Observable(observer => {
+        const subscription = NgReatom.store.subscribe(
+            atom,
+            observer.next.bind(observer),
+        );
+        observer.next(NgReatom.store.getState(atom) as any);
+        return subscription;
     });
+
+    if (fields.length)
+        return stream.pipe(
+            pluck(...fields),
+            distinctUntilChanged(),
+        ) as any;
+    else
+        return stream as any;
 }
 
 export function useAction<A extends BaseActionCreator, P extends any[]>(

@@ -2,17 +2,19 @@ import { declareAction } from '@reatom/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ITodo } from './todos.interface';
 
-export const Loading = declareAction('loading', () => {
+export const loading = declareAction('loading', () => {
     console.log('test action');
 });
 
-export const LoadingSuccess = declareAction<ITodo[]>('loading/success');
+export const loadingSuccess = declareAction<ITodo[]>('loading/success');
 
-export const LoadingFailed = declareAction<HttpErrorResponse>(
+export const loadingFailed = declareAction<HttpErrorResponse>(
     'loading/failed',
     () => {
         alert('error');
     },
 );
 
-export const AddItem = declareAction<string>('addItem');
+export const addItem = declareAction<string>('addItem');
+
+export const toggle = declareAction('toggleAction');

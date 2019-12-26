@@ -1,35 +1,46 @@
 import { declareAtom } from '@reatom/core';
-import { AddItem, Loading, LoadingFailed, LoadingSuccess } from './actions';
+import { addItem, loading, loadingFailed, loadingSuccess, toggle } from './actions';
 import { IState } from './todos.interface';
 
 const initialState: IState = {
-    loading: false,
+    loading  : false,
     deepField: {
         foo: {
-            bar: true,
+            toggle: true,
+            bar   : true,
         },
     },
-    todos: [],
+    todos    : [],
 };
 
 export const Todos = declareAtom<IState>(
     ['todos'],
     initialState,
     on => [
-        on(Loading, state => ({
+        on(loading, state => ({
             ...state,
             loading: true,
         })),
-        on(LoadingSuccess, (state, payload) => ({
+        on(loadingSuccess, (state, payload) => ({
             ...state,
             loading: false,
-            todos: payload,
+            todos  : payload,
         })),
-        on(LoadingFailed, state => ({
+        on(loadingFailed, state => ({
             ...state,
             loading: false,
         })),
-        on(AddItem, (state, text) => ({
+        on(toggle, (state) => ({
+            ...state,
+            deepField: {
+                ...state.deepField,
+                foo: {
+                    ...state.deepField.foo,
+                    toggle: !state.deepField.foo.toggle,
+                },
+            },
+        })),
+        on(addItem, (state, text) => ({
             ...state,
             todos: [
                 ...state.todos,

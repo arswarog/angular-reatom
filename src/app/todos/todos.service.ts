@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DeclareAction, NgReatom } from '../lib';
 import { HttpClient } from '@angular/common/http';
 import { ITodo } from './todos.interface';
-import { Loading, LoadingSuccess } from './actions';
+import { loading, loadingSuccess } from './actions';
 
 @Injectable({
     providedIn: 'root',
@@ -11,11 +11,11 @@ export class TodosService {
     constructor(private store: NgReatom, private http: HttpClient) {
     }
 
-    @DeclareAction(Loading)
+    @DeclareAction(loading)
     public loadTodos(num: number, todo: ITodo) {
         setTimeout(() => {
             this.store.dispatch(
-                LoadingSuccess([
+                loadingSuccess([
                     {
                         text: 'Hello',
                     },
