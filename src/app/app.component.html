@@ -623,6 +623,7 @@ Todo List: <span *ngIf="loading$ | async">(loading)</span>
   <li *ngFor="let item of todos$ | async">
     {{item.text}}
   </li>
+  <button type="button" (click)="load()">Load (from fake backend)</button>
 </ul>
 <div>
   <label><input #text></label>
@@ -638,15 +639,15 @@ Todo List: <span *ngIf="loading$ | async">(loading)</span>
   </ul>
 </div>
 <div>
-  Current state:
+  <h2>Current state:</h2>
   <pre>{{state$ | async | json}}</pre>
 </div>
 <div>
-  <pre>deepField.foo: {{foo$ | async | json}}</pre>
-  <pre>log: {{fooLog | json}}</pre>
-  <pre>deepField.foo.bar: {{bar$ | async | json}}</pre>
-  <pre>log: {{barLog | json}}</pre>
+  <h2>Parts of state:</h2>
+  <pre><b>deepField.foo:</b> {{foo$ | async | json}}</pre>
+  <pre><b>change log for deepField.foo:</b> {{fooLog | json}}</pre>
+  <pre><b>deepField.foo.bar:</b> {{bar$ | async | json}}</pre>
+  <pre><b>change log for deepField.foo.bar:</b> {{barLog | json}}</pre>
 </div>
-<button type="button" (click)="toggle()">Toggle</button>
-<button type="button" (click)="load()">Load</button>
+<button type="button" (click)="toggle()">Toggle deepField.foo.toggle</button>
 <router-outlet></router-outlet>
