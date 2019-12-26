@@ -1,6 +1,7 @@
 # AngularReatom
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.20.
+This small project is example for using Angular binding for Reatom
+[Live preview](https://arswarog.github.io/angular-reatom-example/)
 
 ## Development server
 
