@@ -1,20 +1,22 @@
 import { declareAction } from '@reatom/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ITodo } from './todos.interface';
+import { ITodo } from './todo-list.interface';
 
 export const loading = declareAction('loading', () => {
     console.log('test action');
 });
 
-export const loadingSuccess = declareAction<ITodo[]>('loading/success');
+export const todoListLoad = declareAction<{ num: number, todo: ITodo }>('todoList:load');
 
-export const loadingFailed = declareAction<HttpErrorResponse>(
-    'loading/failed',
+export const todoListLoadSuccess = declareAction<ITodo[]>('todoList:load/success');
+
+export const todoListLoadFailed = declareAction<HttpErrorResponse>(
+    'todoList:load/failed',
     () => {
         alert('error');
     },
 );
 
-export const addItem = declareAction<string>('addItem');
+export const addItem = declareAction<string>('todoList:addItem');
 
-export const toggle = declareAction('toggleAction');
+export const toggle = declareAction('todoList:toggleAction');

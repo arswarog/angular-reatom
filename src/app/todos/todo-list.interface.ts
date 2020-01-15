@@ -3,7 +3,7 @@ export interface ITodo {
 }
 
 export interface IState {
-    todos: ITodo[];
+    list: ITodo[];
     loading: boolean;
     deepField: {
         foo: {

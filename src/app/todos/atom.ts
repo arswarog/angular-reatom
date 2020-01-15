@@ -1,6 +1,6 @@
 import { declareAtom } from '@reatom/core';
-import { addItem, loading, loadingFailed, loadingSuccess, toggle } from './actions';
-import { IState } from './todos.interface';
+import { IState } from './todo-list.interface';
+import { addItem, todoListLoad, todoListLoadFailed, todoListLoadSuccess, toggle } from './actions';
 
 const initialState: IState = {
     loading  : false,
@@ -10,23 +10,23 @@ const initialState: IState = {
             bar   : true,
         },
     },
-    todos    : [],
+    list     : [],
 };
 
-export const Todos = declareAtom<IState>(
-    ['todos'],
+export const TodoList = declareAtom<IState>(
+    ['todoList'],
     initialState,
     on => [
-        on(loading, state => ({
+        on(todoListLoad, state => ({
             ...state,
             loading: true,
         })),
-        on(loadingSuccess, (state, payload) => ({
+        on(todoListLoadSuccess, (state, payload) => ({
             ...state,
             loading: false,
-            todos  : payload,
+            list  : payload,
         })),
-        on(loadingFailed, state => ({
+        on(todoListLoadFailed, state => ({
             ...state,
             loading: false,
         })),
@@ -42,8 +42,8 @@ export const Todos = declareAtom<IState>(
         })),
         on(addItem, (state, text) => ({
             ...state,
-            todos: [
-                ...state.todos,
+            list: [
+                ...state.list,
                 {
                     text,
                 },

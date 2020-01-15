@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgReatom, useAction, useAtom } from './lib';
 
-import { TodosService } from './todos/todos.service';
-import { addItem, loading, loadingFailed, toggle } from './todos/actions';
-import { Todos } from './todos/atom';
-import { pluck } from 'rxjs/operators';
+import { TodoListService } from './todos/todo-list.service';
+import { addItem, todoListLoad, toggle } from './todos/actions';
+import { TodoList } from './todos/atom';
 
 @Component({
     selector   : 'app-root',
@@ -14,11 +13,11 @@ import { pluck } from 'rxjs/operators';
 export class AppComponent implements OnInit {
     title = 'angular-reatom';
 
-    loading$ = useAtom(Todos, 'loading');
-    todos$ = useAtom(Todos, 'todos');
-    foo$ = useAtom(Todos, 'deepField', 'foo');
-    bar$ = useAtom(Todos, 'deepField', 'foo', 'bar');
-    state$ = useAtom(Todos);
+    loading$ = useAtom(TodoList, 'loading');
+    list$ = useAtom(TodoList, 'list');
+    foo$ = useAtom(TodoList, 'deepField', 'foo');
+    bar$ = useAtom(TodoList, 'deepField', 'foo', 'bar');
+    state$ = useAtom(TodoList);
 
     addItem = useAction(addItem);
 
@@ -26,10 +25,12 @@ export class AppComponent implements OnInit {
 
     actions = [];
 
+    loadTodoList = useAction(todoListLoad);
+
     fooLog: any[] = [];
     barLog: any[] = [];
 
-    constructor(public service: TodosService,
+    constructor(public service: TodoListService,
                 private reatom: NgReatom) {
         this.reatom.subscribe(action => {
             this.actions.push(action);
@@ -47,11 +48,11 @@ export class AppComponent implements OnInit {
     }
 
     load() {
-        this.service.loadTodos(
-            0,
-            {
+        this.loadTodoList({
+            num : 0,
+            todo: {
                 text: 'ngOnInit text',
             },
-        );
+        });
     }
 }

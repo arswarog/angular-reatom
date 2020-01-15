@@ -1,21 +1,19 @@
 import { Injectable } from '@angular/core';
-import { DeclareAction, NgReatom } from '../lib';
+import { NgReatom, onAction } from '../lib';
 import { HttpClient } from '@angular/common/http';
-import { ITodo } from './todos.interface';
-import { loading, loadingSuccess } from './actions';
+import { todoListLoad, todoListLoadSuccess } from './actions';
 
 @Injectable({
     providedIn: 'root',
 })
-export class TodosService {
+export class TodoListService {
     constructor(private store: NgReatom, private http: HttpClient) {
     }
 
-    @DeclareAction(loading)
-    public loadTodos(num: number, todo: ITodo) {
+    public loadTodoList = onAction(todoListLoad, ({num, todo}) => {
         setTimeout(() => {
             this.store.dispatch(
-                loadingSuccess([
+                todoListLoadSuccess([
                     {
                         text: 'Hello',
                     },
@@ -23,5 +21,6 @@ export class TodosService {
                 ]),
             );
         }, 1000);
-    }
+    });
 }
+

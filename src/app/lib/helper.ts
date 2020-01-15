@@ -1,13 +1,14 @@
 import { Observable } from 'rxjs';
 import { NgReatom } from './ng-reatom.service';
 import {
+    Action,
     ActionCreator,
     Atom,
     BaseActionCreator,
     declareAction, PayloadActionCreator,
 } from '@reatom/core';
 import { distinctUntilChanged, pluck } from 'rxjs/operators';
-
+import { State } from '@reatom/core/src/kernel';
 
 export type AtomType<T extends Atom<any>> = T extends Atom<infer R> ? R : never;
 
@@ -84,26 +85,4 @@ export function useAction<A extends BaseActionCreator, P extends any[]>(
 ): A {
     return ((...props: P) =>
         NgReatom.store.dispatch((actionCreator as any)(...props))) as any;
-}
-
-export function DeclareAction(actionCreator?: ActionCreator | PayloadActionCreator<any>) {
-    return (target, name) => {
-        const descriptor = Object.getOwnPropertyDescriptor(target, name);
-        const original = descriptor.value;
-        const actionName =
-            (target.constructor.name || 'UnnamedService') + '/' + name;
-
-        const declaredAction = declareAction<any>(actionName);
-
-        descriptor.value = function (...args: any[]) {
-            const action = declaredAction(args);
-            NgReatom.store.dispatch(action);
-            if (actionCreator)
-                NgReatom.store.dispatch(actionCreator(args));
-            original.apply(this, args);
-        };
-
-        Object.defineProperty(target, name, descriptor);
-        return descriptor;
-    };
 }

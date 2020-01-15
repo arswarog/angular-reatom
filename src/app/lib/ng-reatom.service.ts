@@ -3,7 +3,7 @@ import {
     Atom,
     Store,
     PayloadActionCreator,
-    Action,
+    Action, ActionCreator,
 } from '@reatom/core';
 import { State } from '@reatom/core/src/kernel';
 import { Injectable } from '@angular/core';
@@ -13,8 +13,8 @@ const error = () => {
 };
 
 const NotConfiguredStore: Readonly<Store> = {
-    dispatch: error,
-    getState: error,
+    dispatch : error,
+    getState : error,
     subscribe: error,
 };
 
@@ -52,6 +52,7 @@ export class NgReatom {
             throw new Error('Store already configured!');
 
         this.setStore(createStore(atom as Atom<any>, initState));
+        this.store.subscribe(handlerForOnAction);
     }
 
     private setStore(store) {
@@ -61,3 +62,34 @@ export class NgReatom {
 }
 
 type ActionsSubscriber = (action: Action<unknown>, stateDiff: State) => any;
+
+type Reaction<T = unknown> = (payload?: T) => void;
+
+const onActionReactions: {
+    [type: string]: Reaction[]
+} = {};
+
+export function onAction(actionType: string | ActionCreator,
+                         reaction: Reaction<unknown>);
+export function onAction<T>(actionType: PayloadActionCreator<T>,
+                            reaction: Reaction<T>);
+export function onAction<T = unknown>(actionType: string | ActionCreator | PayloadActionCreator<T>,
+                                      reaction: Reaction<T>) {
+    let type = '';
+    if (typeof actionType === 'string')
+        type = actionType;
+    else if (typeof actionType.getType === 'function')
+        type = actionType.getType();
+    else
+        throw new Error('Incorrect actionType parameter');
+
+    if (type in onActionReactions)
+        onActionReactions[type].push(reaction);
+    else
+        onActionReactions[type] = [reaction];
+}
+
+export function handlerForOnAction(action: Action<unknown>, stateDiff: State): void {
+    if (action.type in onActionReactions)
+        onActionReactions[action.type].forEach(reaction => reaction(action.payload));
+}
