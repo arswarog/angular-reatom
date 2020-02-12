@@ -1,0 +1,9 @@
+{
+  "name": "@reatom/angular",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^8.2.14",
+    "@angular/core": "^8.2.14",
+    "@reatom/core": "^1.0.0"
+  }
+}

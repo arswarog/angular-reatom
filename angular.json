@@ -124,6 +124,41 @@
           }
         }
       }
+    },
+    "reatom": {
+      "projectType": "library",
+      "root": "projects/reatom",
+      "sourceRoot": "projects/reatom/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/reatom/tsconfig.lib.json",
+            "project": "projects/reatom/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/reatom/src/test.ts",
+            "tsConfig": "projects/reatom/tsconfig.spec.json",
+            "karmaConfig": "projects/reatom/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/reatom/tsconfig.lib.json",
+              "projects/reatom/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "angular-reatom"
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NgReatom, useAction, useAtom } from './lib';
 
 import { TodoListService } from './todos/todo-list.service';
 import { addItem, todoListLoad, toggle } from './todos/actions';
 import { TodoList } from './todos/atom';
+import { NgReatom, useAction, useAtom } from '@reatom/angular';
 
 @Component({
     selector   : 'app-root',

@@ -2,29 +2,32 @@ import {
     createStore,
     Atom,
     Store,
+    Action,
     PayloadActionCreator,
-    Action, ActionCreator,
+    ActionCreator,
 } from '@reatom/core';
 import { State } from '@reatom/core/src/kernel';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
+import { BaseAction } from '@reatom/core/build/kernel';
 
-const error = () => {
-    throw new Error('Store not yet configured!');
-};
-
-const NotConfiguredStore: Readonly<Store> = {
-    dispatch : error,
-    getState : error,
-    subscribe: error,
-};
+export const RootAtom = new InjectionToken('NgReatomRootAtom');
 
 @Injectable({
     providedIn: 'root',
 })
 export class NgReatom {
-    public static store: Store = NotConfiguredStore;
+    public static store: Store = null;
 
-    private store: Store = NotConfiguredStore;
+    public store: Store;
+
+    constructor(@Optional() @Inject(RootAtom) rootAtom: Atom<any>) {
+        console.log('Initializing NgReatom');
+        if (NgReatom.store)
+            this.setStore(NgReatom.store);
+        else
+            this.setStore(createStore(rootAtom));
+        this.store.subscribe(handlerForOnAction);
+    }
 
     dispatch(action: Action<unknown>): void {
         this.store.dispatch(action);
@@ -45,20 +48,11 @@ export class NgReatom {
         return this.store.getState(target);
     }
 
-    createStore(initState?: State): void;
-    createStore(atom: Atom<any>, initState?: State): void;
-    createStore(atom: Atom<any> | State, initState?: State): void {
-        if (this.store !== NotConfiguredStore)
-            throw new Error('Store already configured!');
-
-        this.setStore(createStore(atom as Atom<any>, initState));
-        this.store.subscribe(handlerForOnAction);
-    }
-
     private setStore(store) {
         this.store = store;
         NgReatom.store = store;
     }
+
 }
 
 type ActionsSubscriber = (action: Action<unknown>, stateDiff: State) => any;

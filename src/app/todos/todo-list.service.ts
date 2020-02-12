@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { NgReatom, onAction } from '../lib';
 import { HttpClient } from '@angular/common/http';
 import { todoListLoad, todoListLoadSuccess } from './actions';
+import { NgReatom, onAction } from '@reatom/angular';
 
 @Injectable({
     providedIn: 'root',

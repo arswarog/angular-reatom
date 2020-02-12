@@ -5,7 +5,7 @@ import { connectReduxDevtools } from '@reatom/debug';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgReatom, NgReatomModule } from './lib';
+import { NgReatom, NgReatomModule } from '@reatom/angular';
 
 @NgModule({
     declarations: [
@@ -15,7 +15,7 @@ import { NgReatom, NgReatomModule } from './lib';
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
-        NgReatomModule,
+        NgReatomModule.forRoot(),
     ],
     providers: [],
     bootstrap: [
@@ -24,8 +24,6 @@ import { NgReatom, NgReatomModule } from './lib';
 })
 export class AppModule {
     constructor(ngReatom: NgReatom) {
-        ngReatom.createStore();
-
-        const unsubscribeDevTools = connectReduxDevtools(ngReatom, {});
+        const unsubscribeDevTools = connectReduxDevtools(ngReatom.store, {});
     }
 }

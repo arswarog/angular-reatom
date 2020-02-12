@@ -1,7 +1,7 @@
 # AngularReatom
 
 This small project is example for using Angular binding for Reatom
-[Live preview](https://arswarog.ru/angular-reatom-example/)
+[Live preview](https://arswarog.ru/angular-reatom/)
 
 ## Development server
 

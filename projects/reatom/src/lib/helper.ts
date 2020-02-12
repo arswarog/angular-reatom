@@ -1,5 +1,4 @@
 import { Observable } from 'rxjs';
-import { NgReatom } from './ng-reatom.service';
 import {
     Action,
     ActionCreator,
@@ -9,6 +8,7 @@ import {
 } from '@reatom/core';
 import { distinctUntilChanged, pluck } from 'rxjs/operators';
 import { State } from '@reatom/core/src/kernel';
+import { NgReatom } from './reatom.service';
 
 export type AtomType<T extends Atom<any>> = T extends Atom<infer R> ? R : never;
 
