@@ -8,9 +8,16 @@ import {
 } from '@reatom/core';
 import { State } from '@reatom/core/src/kernel';
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
-import { BaseAction } from '@reatom/core/build/kernel';
 
 export const RootAtom = new InjectionToken('NgReatomRootAtom');
+
+type ActionsSubscriber = (action: Action<unknown>, stateDiff: State) => any;
+
+type Reaction<T = unknown> = (payload?: T) => void;
+
+let onActionReactions: {
+    [type: string]: Reaction[]
+} = {};
 
 @Injectable({
     providedIn: 'root',
@@ -18,15 +25,12 @@ export const RootAtom = new InjectionToken('NgReatomRootAtom');
 export class NgReatom {
     public static store: Store = null;
 
-    public store: Store;
+    private store: Store;
 
     constructor(@Optional() @Inject(RootAtom) rootAtom: Atom<any>) {
-        console.log('Initializing NgReatom');
-        if (NgReatom.store)
-            this.setStore(NgReatom.store);
-        else
-            this.setStore(createStore(rootAtom));
+        this.setStore(createStore(rootAtom));
         this.store.subscribe(handlerForOnAction);
+        onActionReactions = {};
     }
 
     dispatch(action: Action<unknown>): void {
@@ -52,16 +56,7 @@ export class NgReatom {
         this.store = store;
         NgReatom.store = store;
     }
-
 }
-
-type ActionsSubscriber = (action: Action<unknown>, stateDiff: State) => any;
-
-type Reaction<T = unknown> = (payload?: T) => void;
-
-const onActionReactions: {
-    [type: string]: Reaction[]
-} = {};
 
 export function onAction(actionType: string | ActionCreator,
                          reaction: Reaction<unknown>);
