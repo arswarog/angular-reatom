@@ -1,6 +1,7 @@
 {
   "name": "@reatom/angular",
-  "version": "1.0.0-alpha.0",
+  "description": "Angular bindings package for Reatom store",
+  "version": "1.0.0-alpha.1",
   "peerDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14",
