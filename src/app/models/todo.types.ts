@@ -10,5 +10,8 @@ export interface IState {
             toggle: boolean;
             bar: boolean;
         };
+        another?: {
+            empty: string;
+        }
     };
 }

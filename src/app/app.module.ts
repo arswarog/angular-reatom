@@ -6,6 +6,12 @@ import { connectReduxDevtools } from '@reatom/debug';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgReatom, NgReatomModule } from '@reatom/angular';
+import { TodoList } from './models/todo.atom';
+import { combine } from '@reatom/core';
+
+export function rootAtom(state, action) {
+    return TodoList(state, action);
+}
 
 @NgModule({
     declarations: [
@@ -15,7 +21,7 @@ import { NgReatom, NgReatomModule } from '@reatom/angular';
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
-        NgReatomModule.forRoot(),
+        NgReatomModule.forRoot(rootAtom as any),
     ],
     providers: [],
     bootstrap: [

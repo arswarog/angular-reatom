@@ -361,6 +361,8 @@ Todo List: <span *ngIf="loading$ | async">(loading)</span>
   <pre><b>change log for deepField.foo:</b> {{fooLog | json}}</pre>
   <pre><b>deepField.foo.bar:</b> {{bar$ | async | json}}</pre>
   <pre><b>change log for deepField.foo.bar:</b> {{barLog | json}}</pre>
+  <pre><b>deepField.another.empty:</b> {{empty$ | async | json}}</pre>
+  <pre><b>change log for deepField.another.empty:</b> {{emptyLog | json}}</pre>
 </div>
 <button type="button" (click)="toggle()">Toggle deepField.foo.toggle</button>
 <router-outlet></router-outlet>

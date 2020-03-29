@@ -3,14 +3,14 @@ import { IState } from './todo.types';
 import { addItem, todoListLoad, todoListLoadFailed, todoListLoadSuccess, toggle } from './todo.actions';
 
 const initialState: IState = {
-    loading  : false,
+    loading: false,
     deepField: {
         foo: {
             toggle: true,
-            bar   : true,
+            bar: true,
         },
     },
-    list     : [],
+    list: [],
 };
 
 export const TodoList = declareAtom<IState>(
@@ -24,7 +24,7 @@ export const TodoList = declareAtom<IState>(
         on(todoListLoadSuccess, (state, payload) => ({
             ...state,
             loading: false,
-            list  : payload,
+            list: payload,
         })),
         on(todoListLoadFailed, state => ({
             ...state,

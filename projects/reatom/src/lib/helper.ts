@@ -1,13 +1,9 @@
 import { Observable } from 'rxjs';
 import {
-    Action,
-    ActionCreator,
     Atom,
     BaseActionCreator,
-    declareAction, PayloadActionCreator,
 } from '@reatom/core';
-import { distinctUntilChanged, pluck } from 'rxjs/operators';
-import { State } from '@reatom/core/src/kernel';
+import { distinctUntilChanged, map, pluck } from 'rxjs/operators';
 import { NgReatom } from './reatom.service';
 
 export type AtomType<T extends Atom<any>> = T extends Atom<infer R> ? R : never;
@@ -73,7 +69,7 @@ export function useAtom<T extends Atom<any>>(
 
     if (fields.length)
         return stream.pipe(
-            pluck(...fields),
+            map(getField(...fields)),
             distinctUntilChanged(),
         ) as any;
     else
@@ -85,4 +81,16 @@ export function useAction<A extends BaseActionCreator, P extends any[]>(
 ): A {
     return ((...props: P) =>
         NgReatom.store.dispatch((actionCreator as any)(...props))) as any;
+}
+
+export function getField(...fields: string[]): (obj: any) => any {
+    return obj => fields.reduce(
+        (value, field) => {
+            if (value && typeof value === 'object')
+                return value[field];
+            else
+                return undefined;
+        },
+        obj,
+    );
 }

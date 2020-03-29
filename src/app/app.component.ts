@@ -18,6 +18,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public fooLog: any[] = [];
     public barLog: any[] = [];
+    public emptyLog: any[] = [];
 
     // variables
     public state$ = useAtom(TodoList);
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public list$ = useAtom(TodoList, 'list');
     public foo$ = useAtom(TodoList, 'deepField', 'foo');
     public bar$ = useAtom(TodoList, 'deepField', 'foo', 'bar');
+    public empty$ = useAtom(TodoList, 'deepField', 'another', 'empty');
 
     // actions
     public addItem = useAction(addItem);
@@ -47,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         this.foo$.subscribe(value => this.fooLog.push(value));
         this.bar$.subscribe(value => this.barLog.push(value));
+        this.empty$.subscribe(value => this.emptyLog.push(value));
     }
 
     ngOnInit() {

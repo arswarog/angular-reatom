@@ -9,7 +9,7 @@ import { NgReatom, RootAtom } from './reatom.service';
     providers: [],
 })
 export class NgReatomModule {
-    static forRoot(rootAtom?: Atom<any>): ModuleWithProviders {
+    static forRoot(rootAtom?: Atom<any> | Atom<any>[]): ModuleWithProviders {
         return {
             ngModule: NgReatomModule,
             providers: [

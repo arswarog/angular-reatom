@@ -5,8 +5,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "prebuild": "ng build reatom",
-    "build": "ng build",
+    "prebuild-": "ng build reatom",
+    "build": "ng build --prod --aot",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -25,6 +25,7 @@
     "@angular/router": "~8.2.14",
     "@reatom/core": "^1.1.0",
     "@reatom/debug": "^1.0.0",
+    "core-js": "^2.5.7",
     "gh-pages": "^2.1.1",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
