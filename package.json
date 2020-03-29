@@ -1,10 +1,11 @@
 {
   "name": "angular-reatom",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prebuild": "ng build reatom",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -52,5 +53,15 @@
     "tsickle": "^0.37.0",
     "tslint": "~5.15.0",
     "typescript": "~3.5.3"
-  }
+  },
+  "description": "This small project is example for using Angular binding for Reatom",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arswarog/angular-reatom.git"
+  },
+  "author": "Arswarog <arswarog@yandex.ru>",
+  "bugs": {
+    "url": "https://github.com/arswarog/angular-reatom/issues"
+  },
+  "homepage": "https://github.com/arswarog/angular-reatom#readme"
 }

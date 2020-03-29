@@ -1,6 +1,6 @@
 import { declareAtom } from '@reatom/core';
-import { IState } from './todo-list.interface';
-import { addItem, todoListLoad, todoListLoadFailed, todoListLoadSuccess, toggle } from './actions';
+import { IState } from './todo.types';
+import { addItem, todoListLoad, todoListLoadFailed, todoListLoadSuccess, toggle } from './todo.actions';
 
 const initialState: IState = {
     loading  : false,

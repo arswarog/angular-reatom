@@ -8,6 +8,8 @@ import {
 } from '@reatom/core';
 import { State } from '@reatom/core/src/kernel';
 import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
+import { take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 export const RootAtom = new InjectionToken('NgReatomRootAtom');
 
@@ -25,7 +27,7 @@ let onActionReactions: {
 export class NgReatom {
     public static store: Store = null;
 
-    private store: Store;
+    public store: Store;
 
     constructor(@Optional() @Inject(RootAtom) rootAtom: Atom<any>) {
         this.setStore(createStore(rootAtom));
@@ -81,4 +83,40 @@ export function onAction<T = unknown>(actionType: string | ActionCreator | Paylo
 export function handlerForOnAction(action: Action<unknown>, stateDiff: State): void {
     if (action.type in onActionReactions)
         onActionReactions[action.type].forEach(reaction => reaction(action.payload));
+}
+
+export class RequireAtom<T extends Atom<any>[]> {
+    private subscriptions: (() => void)[] = [];
+
+    constructor(public readonly atoms: T) { }
+
+    get subscribed(): boolean {
+        return !!this.subscriptions.length;
+    }
+
+    public subscribe() {
+        if (!this.subscribed) {
+            this.subscriptions = this.atoms.map(atom => NgReatom.store.subscribe(atom, () => null));
+        }
+    }
+
+    public subscribeUntil(observable: Observable<any>) {
+        this.subscribe();
+        observable
+            .pipe(
+                take(1),
+            )
+            .subscribe(
+                () => this.unsubscribe(),
+            );
+    }
+
+    public unsubscribe() {
+        this.subscriptions.forEach(subscription => subscription());
+        this.subscriptions = [];
+    }
+}
+
+export function requireAtom<T extends Atom<any>[]>(...atoms: T) {
+    return new RequireAtom(atoms);
 }

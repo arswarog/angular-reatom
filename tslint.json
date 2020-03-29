@@ -50,6 +50,8 @@
     "no-consecutive-blank-lines": false,
     "no-console": [
       true,
+      "log",
+      "warn",
       "debug",
       "info",
       "time",

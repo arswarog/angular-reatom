@@ -1,12 +1,12 @@
 import { declareAction } from '@reatom/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ITodo } from './todo-list.interface';
+import { ITodo } from './todo.types';
 
 export const loading = declareAction('loading', () => {
     console.log('test action');
 });
 
-export const todoListLoad = declareAction<{ num: number, todo: ITodo }>('todoList:load');
+export const todoListLoad = declareAction('todoList:load');
 
 export const todoListLoadSuccess = declareAction<ITodo[]>('todoList:load/success');
 

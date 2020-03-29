@@ -1,42 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { TodoListService } from './todos/todo-list.service';
-import { addItem, todoListLoad, toggle } from './todos/actions';
-import { TodoList } from './todos/atom';
-import { NgReatom, useAction, useAtom } from '@reatom/angular';
+import { TodoService } from './models/todo.service';
+import { addItem, todoListLoad, toggle } from './models/todo.actions';
+import { TodoList } from './models/todo.atom';
+import { NgReatom, requireAtom, useAction, useAtom } from '@reatom/angular';
+import { Subject } from 'rxjs';
 
 @Component({
-    selector   : 'app-root',
+    selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls  : ['./app.component.scss'],
+    styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
-    title = 'angular-reatom';
+export class AppComponent implements OnInit, OnDestroy {
+    public title = 'angular-reatom';
 
-    loading$ = useAtom(TodoList, 'loading');
-    list$ = useAtom(TodoList, 'list');
-    foo$ = useAtom(TodoList, 'deepField', 'foo');
-    bar$ = useAtom(TodoList, 'deepField', 'foo', 'bar');
-    state$ = useAtom(TodoList);
+    public actions = [];
 
-    addItem = useAction(addItem);
+    public fooLog: any[] = [];
+    public barLog: any[] = [];
 
-    toggle = useAction(toggle);
+    // variables
+    public state$ = useAtom(TodoList);
+    public loading$ = useAtom(TodoList, 'loading');
+    public list$ = useAtom(TodoList, 'list');
+    public foo$ = useAtom(TodoList, 'deepField', 'foo');
+    public bar$ = useAtom(TodoList, 'deepField', 'foo', 'bar');
 
-    actions = [];
+    // actions
+    public addItem = useAction(addItem);
+    public toggle = useAction(toggle);
+    public loadTodoList = useAction(todoListLoad);
 
-    loadTodoList = useAction(todoListLoad);
+    private unsubscribe$ = new Subject();
 
-    fooLog: any[] = [];
-    barLog: any[] = [];
+    private atoms = requireAtom(TodoList);
 
-    constructor(public service: TodoListService,
-                private reatom: NgReatom) {
-        this.reatom.subscribe(action => {
+    constructor(public service: TodoService,
+                private store: NgReatom) {
+        this.store.subscribe(action => {
             this.actions.push(action);
             console.group('ACTION', action.type);
             console.log(action);
-            console.log(this.reatom.getState());
+            console.log(this.store.getState());
             console.groupEnd();
         });
 
@@ -45,14 +50,12 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.atoms.subscribeUntil(this.unsubscribe$);
+
+        this.store.dispatch(toggle());
     }
 
-    load() {
-        this.loadTodoList({
-            num : 0,
-            todo: {
-                text: 'ngOnInit text',
-            },
-        });
+    ngOnDestroy(): void {
+        this.unsubscribe$.next();
     }
 }
